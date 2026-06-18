@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
-import { loginWithGoogle, sendOtp, verifyOtp } from "./api/authApi";
+// import { GoogleLogin } from "@react-oauth/google";
+// import { loginWithGoogle, sendOtp, verifyOtp } from "./api/authApi";
 import { registerUser } from "./api/userApi";
 
 const Register = () => {
@@ -40,35 +40,48 @@ const Register = () => {
     }
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+const handleSendOtp = () => {
+  setOtpSent(true);
+  setOtpError("");
+};
 
-  const handleSendOtp = async () => {
-    if (!formData.email) return setOtpError("Please enter your email first.");
-    try {
-      setIsSending(true);
-      await sendOtp(formData.email);
-      setOtpSent(true);
-      setCountdown(60);
-      setOtpError("");
-    } catch (err) {
-      setOtpError(err.response?.data?.error || "Failed to send OTP.");
-    } finally {
-      setIsSending(false);
-    }
-  };
+const handleVerifyOtp = () => {
+  if (otp === "1234") {
+    setOtpVerified(true);
+    setOtpError("");
+  } else {
+    setOtpVerified(false);
+    setOtpError("Invalid OTP");
+  }
+};
+  // const handleSendOtp = async () => {
+  //   if (!formData.email) return setOtpError("Please enter your email first.");
+  //   try {
+  //     setIsSending(true);
+  //     await sendOtp(formData.email);
+  //     setOtpSent(true);
+  //     setCountdown(60);
+  //     setOtpError("");
+  //   } catch (err) {
+  //     setOtpError(err.response?.data?.error || "Failed to send OTP.");
+  //   } finally {
+  //     setIsSending(false);
+  //   }
+  // };
 
-  const handleVerifyOtp = async () => {
-    if (!otp) return setOtpError("Please enter OTP.");
-    try {
-      setIsVerifying(true);
-      await verifyOtp(formData.email, otp);
-      setOtpVerified(true);
-      setOtpError("");
-    } catch (err) {
-      setOtpError(err.response?.data?.error || "Invalid or expired OTP.");
-    } finally {
-      setIsVerifying(false);
-    }
-  };
+  // const handleVerifyOtp = async () => {
+  //   if (!otp) return setOtpError("Please enter OTP.");
+  //   try {
+  //     setIsVerifying(true);
+  //     await verifyOtp(formData.email, otp);
+  //     setOtpVerified(true);
+  //     setOtpError("");
+  //   } catch (err) {
+  //     setOtpError(err.response?.data?.error || "Invalid or expired OTP.");
+  //   } finally {
+  //     setIsVerifying(false);
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -194,7 +207,7 @@ const Register = () => {
         <span className="relative bg-white px-2 text-sm text-gray-600">Or</span>
       </div>
 
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <GoogleLogin
           onSuccess={async (credentialResponse) => {
             const data = await loginWithGoogle(credentialResponse.credential);
@@ -205,7 +218,7 @@ const Register = () => {
           text="continue_with"
           useOneTap
         />
-      </div>
+      </div> */}
     </div>
   );
 };
